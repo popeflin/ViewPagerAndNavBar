@@ -1,5 +1,6 @@
 package com.dewabrata.fragmenttutorial
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -7,7 +8,10 @@ import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.dewabrata.fragmenttutorial.model.ResponseProduct
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.gson.Gson
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.TextHttpResponseHandler
@@ -15,9 +19,26 @@ import cz.msebera.android.httpclient.Header
 import java.util.concurrent.Executors
 
 class BackgroundActivity : AppCompatActivity() {
+
+    lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_background)
+        //GPS FusedLocation
+
+        fusedLocationProviderClient = FusedLocationProviderClient(this)
+
+        if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION) !== android.content.pm.PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),100)
+        }else{
+            getLocation()
+        }
+
+
+
+
+
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
@@ -73,5 +94,27 @@ class BackgroundActivity : AppCompatActivity() {
 
 
         })
+    }
+
+
+    @SuppressLint("MissingPermission")
+    fun getLocation(){
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+            if(it != null){
+                findViewById<TextView>(R.id.txtStatus).setText(it.latitude.toString())
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if(requestCode ==100 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED){
+            getLocation()
+        }
     }
 }
