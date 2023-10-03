@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -51,5 +52,9 @@ dependencies {
 
 
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("com.loopj.android:android-async-http:1.4.11")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
 
 }

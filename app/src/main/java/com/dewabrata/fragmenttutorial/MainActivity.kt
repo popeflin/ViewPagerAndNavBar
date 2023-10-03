@@ -44,26 +44,26 @@ class MainActivity : AppCompatActivity() {
         val navView : NavigationView =  findViewById<NavigationView>(R.id.nav_view)
         navView.setupWithNavController(navController)
 
-        navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_fragment1 -> {
-                    navController.navigate(R.id.fragmentPage1)
-                    true
-                }
-
-                R.id.nav_fragment2 -> {
-                    navController.navigate(R.id.fragmentPage2)
-                    true
-                }
-
-                R.id.nav_fragment3 -> {
-                    navController.navigate(R.id.fragmentPage3)
-                    true
-                }
-
-                else -> false
-            }
-        }
+//        navView.setNavigationItemSelectedListener { menuItem ->
+//            when (menuItem.itemId) {
+//                R.id.nav_fragment1 -> {
+//                    navController.navigate(R.id.fragmentPage1)
+//                    true
+//                }
+//
+//                R.id.nav_fragment2 -> {
+//                    navController.navigate(R.id.fragmentPage2)
+//                    true
+//                }
+//
+//                R.id.nav_fragment3 -> {
+//                    navController.navigate(R.id.fragmentPage3)
+//                    true
+//                }
+//
+//                else -> false
+//            }
+//        }
 
 
     }
