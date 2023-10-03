@@ -1,6 +1,8 @@
 package com.dewabrata.fragmenttutorial
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +10,7 @@ import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.dewabrata.fragmenttutorial.model.ResponseProduct
@@ -32,7 +35,13 @@ class BackgroundActivity : AppCompatActivity() {
 
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),100)
         }else{
+
             getLocation()
+
+
+
+
+
         }
 
 
@@ -101,7 +110,14 @@ class BackgroundActivity : AppCompatActivity() {
     fun getLocation(){
         fusedLocationProviderClient.lastLocation.addOnSuccessListener {
             if(it != null){
-                findViewById<TextView>(R.id.txtStatus).setText(it.latitude.toString())
+                if(isTuyulApplication(it,this)) {
+
+                    Toast.makeText(this,"Tuyul Application",Toast.LENGTH_SHORT).show()
+                }else {
+
+                    findViewById<TextView>(R.id.txtStatus).setText(it.latitude.toString())
+                }
+
             }
         }
     }
@@ -117,4 +133,25 @@ class BackgroundActivity : AppCompatActivity() {
             getLocation()
         }
     }
-}
+
+
+    fun isTuyulApplication (location : Location?, context : Context) : Boolean {
+
+        if(location == null) return false
+
+        val isMock : Boolean
+        if(android.os.Build.VERSION.SDK_INT >=18){
+            isMock = location.isFromMockProvider
+
+            }else {
+                isMock = android.provider.Settings.Secure.getString(
+                    context.contentResolver,
+                    android.provider.Settings.Secure.ALLOW_MOCK_LOCATION
+                ).equals("1", ignoreCase = true)
+
+            }
+
+        return isMock
+            }
+
+        }
